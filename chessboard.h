@@ -19,6 +19,10 @@ public:
     bool hasUnvisitedSquare() const;
     bool isVisitedSquare(const int i, const int j) const;
     void markVisitedSquare(const int i, const int j);
+    void unmarkVisitedSquare(const int i, const int j);
+    bool isValidSquare(const int i, const int j) const;
+    int getHeight() const;
+    int getWidth() const;
 
     Chessboard& operator=(const Chessboard& other);
 };

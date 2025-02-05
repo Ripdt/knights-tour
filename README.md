@@ -1,13 +1,15 @@
 # knights-tour
 solutions for the knight's tour problem
 
+## brute force
+
 run:
 ```bash
-g++ -g main.cpp chessboard.cpp -o brute-force
+g++ -g brute.cpp chessboard.cpp -o brute-force
 ./brute-force <initialLine> <initialColumn>
 ```
 
-brute force strategy result:
+strategy result example:
 ```
 ./brute-force 2 2
 Path:
@@ -22,4 +24,12 @@ Path:
 
 
 Execution time: 276.347 seconds
+```
+
+## backtracking
+
+run:
+```bash
+g++ -g backtracking.cpp chessboard.cpp -o back-tracking
+./back-tracking <initialLine> <initialColumn>
 ```
