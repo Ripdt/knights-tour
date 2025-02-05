@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include <vector>
+#include <iostream>
 
 template <typename Type>
 class Matrix {
@@ -10,7 +11,7 @@ private:
 
 public:
     Matrix(const unsigned int x, const unsigned int y) {
-        m.resize(x, std::vector<Type>(y, false));
+        m.resize(x, std::vector<Type>(y, 0));
     }
 
     class MatrixRow {
@@ -43,6 +44,13 @@ public:
 
     ConstMatrixRow operator[](unsigned int x) const {
         return ConstMatrixRow(m.at(x));
+    }
+
+    Matrix& operator=(const Matrix<Type>& other) {
+        std::cout << "teste2";
+        if (this != &other)
+            m = other.m;
+        return *this;
     }
 };
 

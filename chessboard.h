@@ -14,7 +14,11 @@ private:
 public:
     Chessboard();
 
+    void printChessboard() const;
     bool hasUnvisittedSquare() const;
+    bool isVisitedSquare(const int i, const int j) const;
+
+    Chessboard& operator=(const Chessboard& other);
 };
 
 #endif
