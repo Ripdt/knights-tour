@@ -10,13 +10,15 @@ class Chessboard
 {
 private:
     Matrix<int> matrix;
+    int numberOfVisitedSquares = 0;
 
 public:
     Chessboard();
 
     void printChessboard() const;
-    bool hasUnvisittedSquare() const;
+    bool hasUnvisitedSquare() const;
     bool isVisitedSquare(const int i, const int j) const;
+    void markVisitedSquare(const int i, const int j);
 
     Chessboard& operator=(const Chessboard& other);
 };

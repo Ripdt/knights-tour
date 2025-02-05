@@ -2,7 +2,6 @@
 #define MATRIX_H
 
 #include <vector>
-#include <iostream>
 
 template <typename Type>
 class Matrix {
@@ -47,7 +46,6 @@ public:
     }
 
     Matrix& operator=(const Matrix<Type>& other) {
-        std::cout << "teste2";
         if (this != &other)
             m = other.m;
         return *this;

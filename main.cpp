@@ -2,6 +2,7 @@
 #include "chessboard.h"
 
 #include <iostream>
+#include <chrono>
 
 struct Square
 {
@@ -34,19 +35,16 @@ Square* newSquare(const int line, const int column, const Chessboard& board)
 
 std::vector<Square*> validSquares(const Square* currentSquare, const Chessboard& board) 
 {
-    std::cout << "init validSquares\n";
     std::vector<Square*> valids;
 
-    // Check if currentSquare is nullptr
     if (currentSquare == nullptr) {
         std::cerr << "Error: currentSquare is nullptr." << std::endl;
-        return valids; // Return an empty vector
+        return valids;
     }
 
     const int currentLine = currentSquare->line;
     const int currentColumn = currentSquare->column;
 
-    // Generate valid squares
     if (Square* next = newSquare(currentLine + 2, currentColumn + 1, board))
          valids.push_back(next);
     
@@ -71,30 +69,30 @@ std::vector<Square*> validSquares(const Square* currentSquare, const Chessboard&
     if (Square* next = newSquare(currentLine - 1, currentColumn - 2, board))
          valids.push_back(next);
 
-    std::cout << "leaving validSquares\n";
     return valids;
 }
 
 void tour(Chessboard& board, const Square* currentSquare) 
 {
-    std::cout << "init tour\n"; 
     if (currentSquare == nullptr) {
         std::cerr << "Error: Current square is nullptr." << std::endl;
         return;
     }
 
+    board.markVisitedSquare(currentSquare->line, currentSquare->column);
+
     Chessboard model = board;
     std::vector<Square*> valids = validSquares(currentSquare, board);
-
-    std::cout << "init connects\n";
     
     for (Square* current : valids)
     {
-        std::cout << "inside\n";
         tour(model, current);
-        if (!model.hasUnvisittedSquare()) {
+        if (!model.hasUnvisitedSquare()) {
             board = model;
             break;
+        }
+        else {
+            model = board;
         }
     }
     
@@ -102,8 +100,6 @@ void tour(Chessboard& board, const Square* currentSquare)
     {
         delete current;
     }
-
-    std::cout << "leaving\n";
 }
 
 
@@ -113,26 +109,29 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Convert command line arguments to integers
     const int initialLine = std::atoi(argv[1]);
     const int initialColumn = std::atoi(argv[2]);
 
     Chessboard board;
 
-    std::cout << "before\n";
-    board.printChessboard();
-
     Square* initialSquare = newSquare(initialLine, initialColumn, board);
 
     if (initialSquare == nullptr) {
         std::cerr << "Error: Initial square is invalid." << std::endl;
-        return 1; // Exit with an error code
+        return 1;
     }
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     tour(board, initialSquare);
 
-    std::cout << "after\n";
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+
+    std::cout << "Path:" << std::endl;
     board.printChessboard();
+
+    std::cout << std::endl << std::endl << "Execution time: " << duration.count() << " seconds" << std::endl;
 
     delete initialSquare;
 

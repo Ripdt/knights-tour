@@ -8,22 +8,16 @@ Chessboard& Chessboard::operator=(
     const Chessboard& other
 )
 {
-    std::cout << "Assigning Chessboard" << std::endl;
     if (this != &other) {
-        std::cout << "Copying matrix" << std::endl;
-        matrix = other.matrix; // Check if this line is reached
+        numberOfVisitedSquares = other.numberOfVisitedSquares;
+        matrix = other.matrix;
     }
     return *this;
 }
 
-bool Chessboard::hasUnvisittedSquare() const
+bool Chessboard::hasUnvisitedSquare() const
 {
-    for (int i = 0; i < N_BOARD_LINE; i++)
-        for (int j = 0; j < N_BOARD_COLUMN; j++)
-            if (!isVisitedSquare(i, j))
-                return true;
-
-    return false;
+    return numberOfVisitedSquares != N_BOARD_LINE * N_BOARD_COLUMN;
 }
 
 bool Chessboard::isVisitedSquare(
@@ -43,4 +37,13 @@ void Chessboard::printChessboard() const
         }
         std::cout << std::endl;
     }
+}
+
+void Chessboard::markVisitedSquare(
+    const int i,
+    const int j
+)
+{
+    numberOfVisitedSquares++;
+    matrix[i][j] = numberOfVisitedSquares;
 }
