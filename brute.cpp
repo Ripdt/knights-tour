@@ -15,26 +15,17 @@ bool brute(int x, int y, Chessboard& board, int& step) {
     }
 
     ++step;
-    std::vector<std::pair<int, int>> available;
     for (int i = 0; i < 8; i++) {
         int nextX = x + moves[i][0];
         int nextY = y + moves[i][1];
+        
         if (board.isValidSquare(nextX, nextY) && !board.isVisitedSquare(nextX, nextY)) {
-            int distanceToEdge = std::min({nextX, nextY, board.getHeight() - nextX - 1, board.getWidth() - nextY - 1});
-            available.emplace_back(distanceToEdge, i);
+            board.markVisitedSquare(nextX, nextY);
+            if (brute(nextX, nextY, board, step)) {
+                return true;
+            }
+            board.unmarkVisitedSquare(nextX, nextY);
         }
-    }
-
-    for (const auto& move : available) {
-        const int i = move.second;
-        const int nextX = x + moves[i][0];
-        const int nextY = y + moves[i][1];
-
-        board.markVisitedSquare(nextX, nextY);
-        if (brute(nextX, nextY, board, step)) {
-            return true;
-        }
-        board.unmarkVisitedSquare(nextX, nextY);
     }
     return false;
 }

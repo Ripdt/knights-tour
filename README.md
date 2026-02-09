@@ -23,7 +23,7 @@ Path:
         52      47      56      45      54      5       22      13
 
 
-Execution time: 4.71557 seconds
+Execution time: 2.42649 seconds
 Steps: 8250733
 ```
 
