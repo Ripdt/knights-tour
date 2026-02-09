@@ -48,5 +48,6 @@ Path:
         20      7       22      37      18      9       32      35
 
 
-Execution time: 0.00203228 seconds
+Execution time: 0.00154346 seconds
+Steps: 1643
 ```

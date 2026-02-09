@@ -72,21 +72,22 @@ std::vector<Square*> validSquares(const Square* currentSquare, const Chessboard&
     return valids;
 }
 
-void tour(Chessboard& board, const Square* currentSquare) 
+void tour(Chessboard& board, const Square* currentSquare, int& step) 
 {
     if (currentSquare == nullptr) {
         std::cerr << "Error: Current square is nullptr." << std::endl;
         return;
     }
 
+    ++step;
     board.markVisitedSquare(currentSquare->line, currentSquare->column);
 
     Chessboard model = board;
     std::vector<Square*> valids = validSquares(currentSquare, board);
-    
+
     for (Square* current : valids)
     {
-        tour(model, current);
+        tour(model, current, step);
         if (!model.hasUnvisitedSquare()) {
             board = model;
             break;
@@ -121,9 +122,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    int step = 0;
     auto start = std::chrono::high_resolution_clock::now();
 
-    tour(board, initialSquare);
+    tour(board, initialSquare, step);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
@@ -132,6 +134,7 @@ int main(int argc, char* argv[]) {
     board.printChessboard();
 
     std::cout << std::endl << std::endl << "Execution time: " << duration.count() << " seconds" << std::endl;
+    std::cout << "Steps: " << step << std::endl;
 
     delete initialSquare;
 

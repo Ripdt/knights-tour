@@ -9,11 +9,12 @@ const int moves[8][2] = {
     {-2, -1}, {-1, -2}, {1, -2}, {2, -1}
 };
 
-bool solveKTUtil(int x, int y, Chessboard& board) {
+bool solveKTUtil(int x, int y, Chessboard& board, int& step) {
     if (!board.hasUnvisitedSquare()) {
         return true;
     }
 
+    ++step;
     std::vector<std::pair<int, int>> orderedMoves;
     for (int i = 0; i < 8; i++) {
         int nextX = x + moves[i][0];
@@ -31,7 +32,7 @@ bool solveKTUtil(int x, int y, Chessboard& board) {
         const int nextY = y + moves[i][1];
 
         board.markVisitedSquare(nextX, nextY);
-        if (solveKTUtil(nextX, nextY, board)) {
+        if (solveKTUtil(nextX, nextY, board, step)) {
             return true;
         }
         board.unmarkVisitedSquare(nextX, nextY);
@@ -39,12 +40,12 @@ bool solveKTUtil(int x, int y, Chessboard& board) {
     return false;
 }
 
-void solveKT(const int initialLine, const int initialColumn) {
+void solveKT(const int initialLine, const int initialColumn, int& step) {
     Chessboard board;
 
     board.markVisitedSquare(initialLine, initialColumn);
-
-    if (solveKTUtil(initialLine, initialColumn, board)) {
+    ++step;
+    if (solveKTUtil(initialLine, initialColumn, board, step)) {
         std::cout << "Path:" << std::endl;
         board.printChessboard();
     } else {
@@ -60,15 +61,17 @@ int main(int argc, char* argv[]) {
 
     const int initialLine = std::atoi(argv[1]);
     const int initialColumn = std::atoi(argv[2]);
+    int step = 0;
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    solveKT(initialLine, initialColumn);
+    solveKT(initialLine, initialColumn, step);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
 
     std::cout << std::endl << std::endl << "Execution time: " << duration.count() << " seconds" << std::endl;
+    std::cout << "Steps: " << step << std::endl;
     
     return 0;
 }
