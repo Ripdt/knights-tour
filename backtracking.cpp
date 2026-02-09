@@ -18,23 +18,23 @@ bool solveKTUtil(int x, int y, Chessboard& board) {
     for (int i = 0; i < 8; i++) {
         int nextX = x + moves[i][0];
         int nextY = y + moves[i][1];
-        if (board.isValidSquare(nextX, nextY)) {
+        if (board.isValidSquare(nextX, nextY) && !board.isVisitedSquare(nextX, nextY)) {
             int distanceToEdge = std::min({nextX, nextY, board.getHeight() - nextX - 1, board.getWidth() - nextY - 1});
             orderedMoves.emplace_back(distanceToEdge, i);
         }
     }
 
     std::sort(orderedMoves.begin(), orderedMoves.end());
-    
-    for (int i = 0; i < 8; i++) {
-        const int nextX = orderedMoves.at(i).first, nextY = orderedMoves.at(i).second;
-        if (board.isValidSquare(nextX, nextY) && !board.isVisitedSquare(nextX, nextY)) {
-            board.markVisitedSquare(nextX, nextY);
-            if (solveKTUtil(nextX, nextY, board)) {
-                return true;
-            }
-            board.unmarkVisitedSquare(nextX, nextY);
+    for (const auto& move : orderedMoves) {
+        const int i = move.second;
+        const int nextX = x + moves[i][0];
+        const int nextY = y + moves[i][1];
+
+        board.markVisitedSquare(nextX, nextY);
+        if (solveKTUtil(nextX, nextY, board)) {
+            return true;
         }
+        board.unmarkVisitedSquare(nextX, nextY);
     }
     return false;
 }
@@ -45,6 +45,7 @@ void solveKT(const int initialLine, const int initialColumn) {
     board.markVisitedSquare(initialLine, initialColumn);
 
     if (solveKTUtil(initialLine, initialColumn, board)) {
+        std::cout << "Path:" << std::endl;
         board.printChessboard();
     } else {
         std::cout << "Solution does not exist" << std::endl;
